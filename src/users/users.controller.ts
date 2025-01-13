@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Param, Body } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { createUserSchema } from './schemas/create-user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -13,15 +13,5 @@ export class UsersController {
     @Body(new ZodValidationPipe(createUserSchema)) createUserDto: CreateUserDto,
   ) {
     return this.usersService.create(createUserDto);
-  }
-
-  @Get()
-  async findAll() {
-    return this.usersService.findAll();
-  }
-
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return this.usersService.findOne(id);
   }
 }
