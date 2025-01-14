@@ -7,6 +7,8 @@ import {
   HttpStatus,
   UseGuards,
   Get,
+  Delete,
+  Param,
 } from '@nestjs/common';
 import { UrlsService } from './urls.service';
 import { CreateUrlDto } from './dto/create-url.dto';
@@ -58,5 +60,14 @@ export class UrlsController {
     const urls = await this.urlsService.findAllByUser(userId);
 
     return urls;
+  }
+
+  @Delete(':shortUrl')
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async delete(@Param('shortUrl') shortUrl: string, @Req() req: Request) {
+    const userId = (req.user as JwtPayload)?.userId || null;
+    await this.urlsService.delete(shortUrl, userId);
+    return;
   }
 }

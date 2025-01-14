@@ -20,6 +20,7 @@ describe('UrlsController', () => {
           useValue: {
             create: jest.fn(),
             findAllByUser: jest.fn(),
+            delete: jest.fn(),
           },
         },
         {
@@ -82,11 +83,13 @@ describe('UrlsController', () => {
           shortUrl: 'abc123',
           originalUrl: 'http://example.com',
           clicksCount: 10,
+          updatedAt: new Date(),
         },
         {
           shortUrl: 'def456',
           originalUrl: 'http://another.com',
           clicksCount: 20,
+          updatedAt: new Date(),
         },
       ];
 
@@ -140,6 +143,52 @@ describe('UrlsController', () => {
         NotFoundException,
       );
       expect(urlsService.findAllByUser).toHaveBeenCalledWith(userId);
+    });
+  });
+
+  describe('delete', () => {
+    it('should delete a URL if it belongs to the user', async () => {
+      const shortUrl = 'abc123';
+      const userId = '123';
+      const req = { user: { userId } } as any;
+
+      jest.spyOn(urlsService, 'delete').mockResolvedValue(undefined);
+
+      await urlsController.delete(shortUrl, req);
+
+      expect(urlsService.delete).toHaveBeenCalledWith(shortUrl, '123');
+    });
+
+    it('should throw NotFoundException if URL does not belong to user', async () => {
+      const shortUrl = 'abc123';
+      const userId = '123';
+      const req = { user: { userId } } as any;
+
+      jest
+        .spyOn(urlsService, 'delete')
+        .mockRejectedValue(
+          new NotFoundException('You can only delete your own URLs'),
+        );
+
+      await expect(urlsController.delete(shortUrl, req)).rejects.toThrowError(
+        NotFoundException,
+      );
+      expect(urlsService.delete).toHaveBeenCalledWith(shortUrl, '123');
+    });
+
+    it('should throw NotFoundException if URL is not found', async () => {
+      const shortUrl = 'nonexistent';
+      const userId = '123';
+      const req = { user: { userId } } as any;
+
+      jest
+        .spyOn(urlsService, 'delete')
+        .mockRejectedValue(new NotFoundException('URL not found'));
+
+      await expect(urlsController.delete(shortUrl, req)).rejects.toThrowError(
+        NotFoundException,
+      );
+      expect(urlsService.delete).toHaveBeenCalledWith(shortUrl, '123');
     });
   });
 });

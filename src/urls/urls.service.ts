@@ -47,12 +47,30 @@ export class UrlsService {
 
   async findAllByUser(userId: string) {
     return this.prisma.url.findMany({
-      where: { userId },
+      where: { userId, deletedAt: null },
       select: {
         originalUrl: true,
         shortUrl: true,
         clicksCount: true,
+        updatedAt: true,
       },
+    });
+  }
+
+  async delete(shortUrl: string, userId: string | null) {
+    const url = await this.prisma.url.findUnique({ where: { shortUrl } });
+
+    if (!url) {
+      throw new NotFoundException('URL not found');
+    }
+
+    if (url.userId !== userId) {
+      throw new NotFoundException('You can only delete your own URLs');
+    }
+
+    await this.prisma.url.update({
+      where: { shortUrl },
+      data: { deletedAt: new Date() },
     });
   }
 }

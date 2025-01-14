@@ -18,6 +18,7 @@ describe('UrlsService', () => {
       create: jest.fn(),
       findUnique: jest.fn(),
       update: jest.fn(),
+      findMany: jest.fn(),
     },
   };
 
@@ -110,6 +111,41 @@ describe('UrlsService', () => {
       expect(mockPrismaService.url.update).toHaveBeenCalledWith({
         where: { shortUrl },
         data: { clicksCount: { increment: 1 } },
+      });
+    });
+  });
+
+  describe('findAllByUser', () => {
+    it('should return all URLs for a user', async () => {
+      const userId = 'test-user-id';
+      const urls = [
+        {
+          shortUrl: 'abcd12',
+          originalUrl: 'https://example.com',
+          clicksCount: 2,
+          updatedAt: new Date(),
+        },
+        {
+          shortUrl: 'def456',
+          originalUrl: 'https://another.com',
+          clicksCount: 3,
+          updatedAt: new Date(),
+        },
+      ];
+
+      mockPrismaService.url.findMany.mockResolvedValue(urls);
+
+      const result = await service.findAllByUser(userId);
+
+      expect(result).toEqual(urls);
+      expect(mockPrismaService.url.findMany).toHaveBeenCalledWith({
+        where: { userId, deletedAt: null },
+        select: {
+          originalUrl: true,
+          shortUrl: true,
+          clicksCount: true,
+          updatedAt: true,
+        },
       });
     });
   });
