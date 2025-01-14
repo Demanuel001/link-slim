@@ -1,0 +1,198 @@
+{
+	"info": {
+		"_postman_id": "4a74c1e1-4735-432a-b70b-f77b22217d8d",
+		"name": "link-slim",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21735499"
+	},
+	"item": [
+		{
+			"name": "create-user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"John Doe\",\r\n  \"email\": \"johndoe@example.com\",\r\n  \"password\": \"123456\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"johndoe@example.com\",\r\n  \"password\": \"123456\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "link-slim",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1MGM2YWMzYi02MjM5LTQ3NjMtOWFlNC0yY2RhZWI2YjA0NTAiLCJlbWFpbCI6ImRhbmlsb2VtYW51ZWxAZXhhbXBsZS5jb20iLCJpYXQiOjE3MzY4MTc0MDQsImV4cCI6MTczNjgyMTAwNH0.6KjRggErPWPriVQGRJKktaRzG3DbTFp3w1AZ1Day3Rk",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"originalUrl\": \"https://example.com\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/urls",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"urls"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete-url",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1MGM2YWMzYi02MjM5LTQ3NjMtOWFlNC0yY2RhZWI2YjA0NTAiLCJlbWFpbCI6ImRhbmlsb2VtYW51ZWxAZXhhbXBsZS5jb20iLCJpYXQiOjE3MzY4NzE2NDYsImV4cCI6MTczNjg3NTI0Nn0.on16Cuvc-FkO3OKFAFmSVexcvG4y8uXuEFvJKomGUI8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/urls/XDeZoH",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"urls",
+						"XDeZoH"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "list-urls",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update-url",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1MGM2YWMzYi02MjM5LTQ3NjMtOWFlNC0yY2RhZWI2YjA0NTAiLCJlbWFpbCI6ImRhbmlsb2VtYW51ZWxAZXhhbXBsZS5jb20iLCJpYXQiOjE3MzY4NzE2NDYsImV4cCI6MTczNjg3NTI0Nn0.on16Cuvc-FkO3OKFAFmSVexcvG4y8uXuEFvJKomGUI8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"originalUrl\": \"https://github.com/Demanuel001/link-slim\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/urls/kmF0Ak",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"urls",
+						"kmF0Ak"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
