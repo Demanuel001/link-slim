@@ -21,7 +21,7 @@ Link-Slim é um sistema de encurtamento de URLs com autenticação de usuários.
 
 Para rodar o Link-Slim, você precisa ter os seguintes requisitos:
 
-### 1. **Node.js** (versão 20 ou superior)
+### 1. **Node.js** (versão usada no desenvolvimento v22.13.0)
 Certifique-se de ter o Node.js instalado no seu sistema. Caso não tenha, você pode baixá-lo [aqui](https://nodejs.org/).
 
 ### 2. **Docker e Docker Compose**
