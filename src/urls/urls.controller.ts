@@ -9,6 +9,7 @@ import {
   Get,
   Delete,
   Param,
+  Put,
 } from '@nestjs/common';
 import { UrlsService } from './urls.service';
 import { CreateUrlDto } from './dto/create-url.dto';
@@ -69,5 +70,27 @@ export class UrlsController {
     const userId = (req.user as JwtPayload)?.userId || null;
     await this.urlsService.delete(shortUrl, userId);
     return;
+  }
+
+  @Put(':shortUrl')
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  async updateOriginalUrl(
+    @Param('shortUrl') shortUrl: string,
+    @Body('originalUrl') originalUrl: string,
+    @Req() req: Request,
+  ) {
+    const userId = (req.user as JwtPayload)?.userId;
+    const updatedUrl = await this.urlsService.updateOriginalUrl(
+      shortUrl,
+      originalUrl,
+      userId,
+    );
+
+    return {
+      message: 'URL updated successfully',
+      updatedUrl: updatedUrl.originalUrl,
+      shortUrl: updatedUrl.shortUrl,
+    };
   }
 }

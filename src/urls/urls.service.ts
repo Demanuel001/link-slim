@@ -73,4 +73,25 @@ export class UrlsService {
       data: { deletedAt: new Date() },
     });
   }
+
+  async updateOriginalUrl(
+    shortUrl: string,
+    originalUrl: string,
+    userId: string,
+  ) {
+    const url = await this.prisma.url.findUnique({ where: { shortUrl } });
+
+    if (!url) {
+      throw new NotFoundException('URL not found');
+    }
+
+    if (url.userId !== userId) {
+      throw new NotFoundException('You can only update your own URLs');
+    }
+
+    return this.prisma.url.update({
+      where: { shortUrl },
+      data: { originalUrl },
+    });
+  }
 }

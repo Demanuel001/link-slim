@@ -149,4 +149,48 @@ describe('UrlsService', () => {
       });
     });
   });
+
+  describe('updateOriginalUrl', () => {
+    it('should update the original URL successfully', async () => {
+      const shortUrl = 'abc123';
+      const originalUrl = 'https://new-example.com';
+      const userId = 'test-user-id';
+
+      const existingUrl = {
+        shortUrl,
+        originalUrl: 'https://old-example.com',
+        userId,
+      };
+
+      mockPrismaService.url.findUnique.mockResolvedValue(existingUrl);
+      mockPrismaService.url.update.mockResolvedValue({
+        ...existingUrl,
+        originalUrl,
+      });
+
+      const result = await service.updateOriginalUrl(
+        shortUrl,
+        originalUrl,
+        userId,
+      );
+
+      expect(result.originalUrl).toBe(originalUrl);
+      expect(mockPrismaService.url.update).toHaveBeenCalledWith({
+        where: { shortUrl },
+        data: { originalUrl },
+      });
+    });
+
+    it('should throw a NotFoundException if URL is not found', async () => {
+      const shortUrl = 'abcd12';
+      const originalUrl = 'https://example.com';
+      const userId = 'test-user-id';
+
+      mockPrismaService.url.findUnique.mockResolvedValue(null);
+
+      await expect(
+        service.updateOriginalUrl(shortUrl, originalUrl, userId),
+      ).rejects.toThrowError(new NotFoundException('URL not found'));
+    });
+  });
 });
