@@ -17,6 +17,22 @@ Link-Slim é um sistema de encurtamento de URLs com autenticação de usuários.
 - **PostgreSQL** - Banco de dados relacional.
 - **Docker** - Para containerização do banco de dados.
 
+## Requisitos
+
+Para rodar o Link-Slim, você precisa ter os seguintes requisitos:
+
+### 1. **Node.js** (versão 20 ou superior)
+Certifique-se de ter o Node.js instalado no seu sistema. Caso não tenha, você pode baixá-lo [aqui](https://nodejs.org/).
+
+### 2. **Docker e Docker Compose**
+Você precisará do Docker e do Docker Compose para rodar o banco de dados PostgreSQL em contêineres. Baixe o Docker [aqui](https://www.docker.com/products/docker-desktop) e o Docker Compose será instalado automaticamente com o Docker Desktop.
+
+### 3. **PostgreSQL**
+O projeto utiliza o PostgreSQL como banco de dados relacional. Se preferir rodar o banco localmente sem Docker, você pode instalar o PostgreSQL diretamente no seu sistema. Mais informações [aqui](https://www.postgresql.org/download/).
+
+### 4. **Prisma CLI**
+O Prisma é utilizado como ORM para interação com o banco de dados. O Prisma CLI será instalado automaticamente quando você rodar `npm install`.
+
 ## Rodando o Projeto
 
 ### 1. Instalar as dependências
@@ -27,6 +43,12 @@ npm install
 
 ### 2. Configurar o banco de dados
 Renomeie o arquivo .env.example para .env e configure as variáveis de ambiente conforme necessário.
+
+```bash
+DATABASE_URL="postgresql://username:password@localhost:5432/linkslim?schema=public"
+BASE_URL="http://localhost:3000"
+
+```
 
 ### 3. Iniciar o Docker
 
@@ -47,3 +69,21 @@ Agora que o banco de dados está configurado e as tabelas criadas, você pode ro
 ```bash
 npm run start
 ```
+
+## 📩 Testando a API no Postman
+
+Para facilitar os testes da API, incluí uma collection do Postman com todas as rotas disponíveis.
+
+### 🔹 Passos para importar a Collection
+### 1. Baixe o arquivo da Collection disponível no repositório:
+```bash
+docs/postman/link-slim.postman_collection.json
+```
+
+### 2. Abra o Postman e clique em "Import".
+
+### 3. Selecione o arquivo JSON e importe.
+
+### 4. Configure a variável BASE_URL no ambiente do Postman (se necessário).
+
+Agora você pode testar todas as rotas diretamente no Postman! 🚀
