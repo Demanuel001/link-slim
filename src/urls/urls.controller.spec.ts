@@ -3,6 +3,7 @@ import { UrlsController } from './urls.controller';
 import { UrlsService } from './urls.service';
 import { ConfigService } from '@nestjs/config';
 import { CreateUrlDto } from './dto/create-url.dto';
+import { NotFoundException } from '@nestjs/common';
 
 describe('UrlsController', () => {
   let urlsController: UrlsController;
@@ -18,6 +19,7 @@ describe('UrlsController', () => {
           provide: UrlsService,
           useValue: {
             create: jest.fn(),
+            findAllByUser: jest.fn(),
           },
         },
         {
@@ -69,6 +71,75 @@ describe('UrlsController', () => {
         shortUrl: 'http://localhost:3000/abc123',
       });
       expect(urlsService.create).toHaveBeenCalledWith(createUrlDto, null);
+    });
+  });
+
+  describe('List', () => {
+    it('should return a list of URLs for authenticated user', async () => {
+      const userId = '123';
+      const urls = [
+        {
+          shortUrl: 'abc123',
+          originalUrl: 'http://example.com',
+          clicksCount: 10,
+        },
+        {
+          shortUrl: 'def456',
+          originalUrl: 'http://another.com',
+          clicksCount: 20,
+        },
+      ];
+
+      const req = { user: { userId } } as any;
+
+      jest.spyOn(urlsService, 'findAllByUser').mockResolvedValue(urls);
+
+      const result = await urlsController.findAllByUser(req);
+
+      expect(result).toEqual(urls);
+      expect(urlsService.findAllByUser).toHaveBeenCalledWith(userId);
+    });
+
+    it('should return an empty list if user has no URLs', async () => {
+      const userId = '123';
+      const urls: any[] = [];
+
+      const req = { user: { userId } } as any;
+
+      jest.spyOn(urlsService, 'findAllByUser').mockResolvedValue(urls);
+
+      const result = await urlsController.findAllByUser(req);
+
+      expect(result).toEqual(urls);
+      expect(urlsService.findAllByUser).toHaveBeenCalledWith(userId);
+    });
+
+    it('should handle cases where user has no URLs', async () => {
+      const userId = '123';
+      const urls: any[] = [];
+
+      const req = { user: { userId } } as any;
+
+      jest.spyOn(urlsService, 'findAllByUser').mockResolvedValue(urls);
+
+      const result = await urlsController.findAllByUser(req);
+
+      expect(result).toEqual([]);
+      expect(urlsService.findAllByUser).toHaveBeenCalledWith(userId);
+    });
+
+    it('should throw NotFoundException if user not found', async () => {
+      const userId = '123';
+      const req = { user: { userId } } as any;
+
+      jest
+        .spyOn(urlsService, 'findAllByUser')
+        .mockRejectedValue(new NotFoundException('User not found'));
+
+      await expect(urlsController.findAllByUser(req)).rejects.toThrowError(
+        NotFoundException,
+      );
+      expect(urlsService.findAllByUser).toHaveBeenCalledWith(userId);
     });
   });
 });

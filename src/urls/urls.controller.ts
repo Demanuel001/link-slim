@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   UseGuards,
+  Get,
 } from '@nestjs/common';
 import { UrlsService } from './urls.service';
 import { CreateUrlDto } from './dto/create-url.dto';
@@ -15,6 +16,7 @@ import { Request } from 'express';
 
 import { ConfigService } from '@nestjs/config';
 import { OptionalJwtAuthGuard } from '../auth/guards/optional-Jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 interface JwtPayload {
   userId: string;
@@ -46,5 +48,15 @@ export class UrlsController {
       message: 'URL shortened successfully',
       shortUrl: `${this.baseUrl}/${url.shortUrl}`,
     };
+  }
+
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  async findAllByUser(@Req() req: Request) {
+    const userId = (req.user as JwtPayload)?.userId;
+    const urls = await this.urlsService.findAllByUser(userId);
+
+    return urls;
   }
 }

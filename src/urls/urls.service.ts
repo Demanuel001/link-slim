@@ -44,4 +44,15 @@ export class UrlsService {
       data: { clicksCount: { increment: 1 } },
     });
   }
+
+  async findAllByUser(userId: string) {
+    return this.prisma.url.findMany({
+      where: { userId },
+      select: {
+        originalUrl: true,
+        shortUrl: true,
+        clicksCount: true,
+      },
+    });
+  }
 }
